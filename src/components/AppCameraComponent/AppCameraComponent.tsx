@@ -150,8 +150,6 @@ export const AppCameraComponent: React.FC<AppCameraComponentProps> = ({
       const devices = await navigator.mediaDevices.enumerateDevices()
       const videoDevices = devices.filter((i) => i.kind == 'videoinput')
       setDevices(videoDevices)
-      const item = devices[devices.length - 1]
-      setActiveDeviceId(item.deviceId)
     })()
   }, [])
 
@@ -168,11 +166,15 @@ export const AppCameraComponent: React.FC<AppCameraComponentProps> = ({
     const active = devices.find((item) => item.deviceId !== activeDeviceId)
     if (active) {
       setActiveDeviceId(active.deviceId)
+      if (camera.current) {
+        camera.current.switchCamera()
+      }
     }
   }
 
   return (
     <Wrapper>
+      <span>{activeDeviceId}</span>
       {showImage ? (
         <FullScreenImagePreview
           image={image}
@@ -188,11 +190,12 @@ export const AppCameraComponent: React.FC<AppCameraComponentProps> = ({
           videoSourceDeviceId={activeDeviceId}
           errorMessages={{
             noCameraAccessible:
-              'No camera device accessible. Please connect your camera or try a different browser.',
-            permissionDenied: 'Permission denied. Please refresh and give camera permission.',
+              'Нет доступа к камере. Подключите камеру или попробуйте другой браузер.',
+            permissionDenied:
+              'В доступе отказано. Пожалуйста, обновите и дайте разрешение на использование камеры.',
             switchCamera:
-              'It is not possible to switch camera to different one because there is only one video device accessible.',
-            canvas: 'Canvas is not supported.'
+              'Невозможно переключить камеру на другую, потому что доступно только одно видеоустройство.',
+            canvas: 'Canvas не поддерживается.'
           }}
         />
       )}
@@ -214,6 +217,7 @@ export const AppCameraComponent: React.FC<AppCameraComponentProps> = ({
         />
         <div className={styles.buttons}>
           <Pbutton
+            disabled={!image}
             icon="pi pi-check"
             className="p-button-rounded p-button-outlined"
             aria-label="Сохранить"

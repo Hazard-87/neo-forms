@@ -93,7 +93,6 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
                   <InputText
                     id={field.name}
                     {...field}
-                    autoFocus
                     className={classNames({ 'p-invalid': fieldState.invalid })}
                   />
                 )}
