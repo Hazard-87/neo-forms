@@ -184,9 +184,9 @@ export const AppCameraComponent: React.FC<AppCameraComponentProps> = ({
     }
   }
 
-  if (!activeDeviceId) {
-    return null
-  }
+  useEffect(() => {
+    alert('change')
+  }, [activeDeviceId])
 
   return (
     <Wrapper>
