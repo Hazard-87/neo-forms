@@ -38,7 +38,6 @@ const Home = () => {
       ...data,
       photos
     }
-    console.log(body)
     await postData(body)
   }
 
