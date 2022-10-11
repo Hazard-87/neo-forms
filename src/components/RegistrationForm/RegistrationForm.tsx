@@ -1,20 +1,20 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import { InputText } from 'primereact/inputtext'
 import { InputMask } from 'primereact/inputmask'
 import { Button } from 'primereact/button'
-import { Dropdown } from 'primereact/dropdown'
+import { AutoComplete } from 'primereact/autocomplete'
 import { classNames } from 'primereact/utils'
 import { Image } from 'primereact/image'
-import { CountryService } from '../../service/CountryService'
 import styles from './RegistrationForm.module.scss'
+import { api } from '../../service'
 
 export interface Data {
   company: string
   name: string
   phone: string
   email: string
-  country: string | null
+  city: string | null
 }
 
 interface RegistrationFormProps {
@@ -28,19 +28,14 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
   openCamera,
   onSubmit
 }) => {
-  const [countries, setCountries] = useState([])
-  const countryservice = new CountryService()
+  const [cities, setCities] = useState<string[]>([])
   const defaultValues: Data = {
     company: '',
     name: '',
     phone: '',
     email: '',
-    country: null
+    city: null
   }
-
-  useEffect(() => {
-    countryservice.getCountries().then((data) => setCountries(data))
-  }, [])
 
   const {
     control,
@@ -56,6 +51,24 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
 
   const getFormErrorMessage = (name: 'name' | 'email' | 'company' | 'phone') => {
     return errors[name] && <small className="p-error">{errors[name]?.message}</small>
+  }
+
+  const loadCities = async (query: string) => {
+    try {
+      const res = await api.getCities({ query })
+      const cityData = res.data
+        .map((item: any) => item.data.city)
+        .filter((item: string | null) => item && item.toLowerCase().includes(query.toLowerCase()))
+      setCities(cityData)
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  const searchCity = (event: { query: string }) => {
+    setTimeout(async () => {
+      await loadCities(event.query)
+    }, 500)
   }
 
   return (
@@ -113,8 +126,8 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
                   <InputMask
                     id={field.name}
                     {...field}
-                    mask="+7 (999) 999-9999"
-                    placeholder="+7 (999) 999-9999"
+                    mask="+7 (999) 999-99-99"
+                    placeholder="+7 (999) 999-99-99"
                     className={classNames({ 'p-invalid': fieldState.invalid })}
                   />
                 )}
@@ -155,19 +168,19 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
           <div className={styles.field}>
             <span className="p-float-label">
               <Controller
-                name="country"
+                name="city"
                 control={control}
                 render={({ field }) => (
-                  <Dropdown
+                  <AutoComplete
                     id={field.name}
-                    value={field.value}
-                    onChange={(e) => field.onChange(e.value)}
-                    options={countries}
-                    optionLabel="name"
+                    {...field}
+                    suggestions={cities}
+                    completeMethod={searchCity}
+                    aria-label="Город"
                   />
                 )}
               />
-              <label htmlFor="country">Город</label>
+              <label htmlFor="city">Город</label>
             </span>
           </div>
 
