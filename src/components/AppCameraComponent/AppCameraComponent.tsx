@@ -185,7 +185,7 @@ export const AppCameraComponent: React.FC<AppCameraComponentProps> = ({
   }
 
   useEffect(() => {
-    alert('change', numberOfCameras, activeDeviceId)
+    alert(`change ${numberOfCameras} ${activeDeviceId}`)
   }, [activeDeviceId])
 
   return (
