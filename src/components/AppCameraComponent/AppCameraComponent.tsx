@@ -156,14 +156,14 @@ export const AppCameraComponent: React.FC<AppCameraComponentProps> = ({
       const devices = await navigator.mediaDevices.enumerateDevices()
       const videoDevices = devices.filter((i) => i.kind == 'videoinput')
       setDevices(videoDevices)
-      // const device = videoDevices[videoDevices.length - 1]
-      // if (device) {
-      //   setActiveDeviceId(device.deviceId)
-      // const index = videoDevices.findIndex((item) => item.deviceId === device.deviceId)
-      // if (index > 0) {
-      //   switchCamera()
-      // }
-      // }
+      const device = videoDevices[videoDevices.length - 1]
+      if (device) {
+        setActiveDeviceId(device.deviceId)
+        // const index = videoDevices.findIndex((item) => item.deviceId === device.deviceId)
+        // if (index > 0) {
+        //   switchCamera()
+        // }
+      }
     })()
   }, [])
 
