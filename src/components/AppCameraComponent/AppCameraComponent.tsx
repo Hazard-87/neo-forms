@@ -158,6 +158,7 @@ export const AppCameraComponent: React.FC<AppCameraComponentProps> = ({
   const saveHandler = () => {
     onSave()
   }
+
   const takePhoto = (photo: string) => {
     addPhoto(photo)
     setImage(photo)
@@ -196,7 +197,7 @@ export const AppCameraComponent: React.FC<AppCameraComponentProps> = ({
         />
       )}
       <Control>
-        <ChangeFacingCameraButton disabled={numberOfCameras > 1} onClick={onChangeCamera} />
+        <ChangeFacingCameraButton disabled={numberOfCameras <= 1} onClick={onChangeCamera} />
         <ImagePreview
           image={image}
           onClick={() => {
