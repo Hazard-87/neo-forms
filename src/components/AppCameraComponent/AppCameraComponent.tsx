@@ -144,35 +144,39 @@ export const AppCameraComponent: React.FC<AppCameraComponentProps> = ({
   const [devices, setDevices] = useState<MediaDeviceInfo[]>([])
   const [activeDeviceId, setActiveDeviceId] = useState<string | undefined>(undefined)
 
+  const switchCamera = (device: MediaDeviceInfo): void => {
+    if (camera.current && device.deviceId !== activeDeviceId) {
+      camera.current.switchCamera()
+    }
+    setActiveDeviceId(device.deviceId)
+  }
+
   useEffect(() => {
     ;(async () => {
       // eslint-disable-next-line @typescript-eslint/no-shadow
       const devices = await navigator.mediaDevices.enumerateDevices()
       const videoDevices = devices.filter((i) => i.kind == 'videoinput')
       setDevices(videoDevices)
-      const active = videoDevices[videoDevices.length - 1]
-      if (active) {
-        setActiveDeviceId(active.deviceId)
+      const device = videoDevices[videoDevices.length - 1]
+      if (device) {
+        switchCamera(device)
       }
     })()
   }, [])
 
-  const saveHandler = () => {
+  const saveHandler = (): void => {
     onSave()
   }
 
-  const takePhoto = (photo: string) => {
+  const takePhoto = (photo: string): void => {
     addPhoto(photo)
     setImage(photo)
   }
 
-  const onChangeCamera = () => {
-    const active = devices.find((item) => item.deviceId !== activeDeviceId)
-    if (active) {
-      if (camera.current && active.deviceId !== activeDeviceId) {
-        camera.current.switchCamera()
-      }
-      setActiveDeviceId(active.deviceId)
+  const onChangeCamera = (): void => {
+    const device = devices.find((item) => item.deviceId !== activeDeviceId)
+    if (device) {
+      switchCamera(device)
     }
   }
 
