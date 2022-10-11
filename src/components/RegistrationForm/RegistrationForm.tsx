@@ -266,11 +266,13 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
           </div>
         </div>
 
-        <Button type="submit" label="Отправить" onSubmit={handleSubmit(submitHandler)} />
+        <div>
+          <Button type="submit" label="Отправить" onSubmit={handleSubmit(submitHandler)} />
+          <div className={styles.mt}>
+            <Button label="Очистить" className="p-button-text" onClick={onClear} />
+          </div>
+        </div>
       </form>
-      <div className={styles.mt}>
-        <Button label="Очистить" className="p-button-text" onClick={onClear} />
-      </div>
     </div>
   )
 }
