@@ -13,7 +13,7 @@ class Api {
     }
   }
 
-  getCities(data: { query: string }) {
+  getCities(data: { query: string; count: number }) {
     const url = '4_1/rs/suggest/address'
     return this.post(url, data)
   }

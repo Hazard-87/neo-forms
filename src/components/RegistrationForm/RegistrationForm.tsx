@@ -55,11 +55,19 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
 
   const loadCities = async (query: string) => {
     try {
-      const res = await api.getCities({ query })
-      const cityData = res.data
-        .map((item: any) => item.data.city)
-        .filter((item: string | null) => item && item.toLowerCase().includes(query.toLowerCase()))
-      setCities(cityData)
+      const res = await api.getCities({ query, count: 20 })
+      const cityData = res.data.filter(
+        (item: any) => item.data.city && item.data.city.toLowerCase().includes(query.toLowerCase())
+      )
+
+      const filteredCities: string[] = []
+      cityData.map((item: any) => {
+        const text = item.data.city + ', ' + item.data.region_with_type
+        if (!filteredCities.includes(text)) {
+          filteredCities.push(text)
+        }
+      })
+      setCities(filteredCities)
     } catch (e) {
       console.log(e)
     }
