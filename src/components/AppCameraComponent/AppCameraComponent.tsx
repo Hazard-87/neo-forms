@@ -159,10 +159,10 @@ export const AppCameraComponent: React.FC<AppCameraComponentProps> = ({
       const device = videoDevices[videoDevices.length - 1]
       if (device) {
         setActiveDeviceId(device.deviceId)
-        const index = videoDevices.findIndex((item) => item.deviceId === device.deviceId)
-        if (index > 0) {
-          switchCamera()
-        }
+        // const index = videoDevices.findIndex((item) => item.deviceId === device.deviceId)
+        // if (index > 0) {
+        //   switchCamera()
+        // }
       }
     })()
   }, [])
