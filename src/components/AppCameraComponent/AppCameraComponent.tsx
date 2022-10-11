@@ -180,12 +180,13 @@ export const AppCameraComponent: React.FC<AppCameraComponentProps> = ({
     const device = devices.find((item) => item.deviceId !== activeDeviceId)
     if (device) {
       setActiveDeviceId(device.deviceId)
-      switchCamera()
     }
   }
 
   useEffect(() => {
-    alert(`change ${numberOfCameras} ${activeDeviceId}`)
+    if (numberOfCameras > 1) {
+      switchCamera()
+    }
   }, [activeDeviceId])
 
   return (
