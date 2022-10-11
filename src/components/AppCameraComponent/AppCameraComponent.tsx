@@ -166,9 +166,9 @@ export const AppCameraComponent: React.FC<AppCameraComponentProps> = ({
     const active = devices.find((item) => item.deviceId !== activeDeviceId)
     if (active) {
       setActiveDeviceId(active.deviceId)
-      if (camera.current) {
-        camera.current.switchCamera()
-      }
+      // if (camera.current) {
+      //   camera.current.switchCamera()
+      // }
     }
   }
 
