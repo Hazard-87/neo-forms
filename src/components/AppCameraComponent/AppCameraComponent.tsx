@@ -145,9 +145,6 @@ export const AppCameraComponent: React.FC<AppCameraComponentProps> = ({
   const [activeDeviceId, setActiveDeviceId] = useState<string | undefined>(undefined)
 
   const switchCamera = (device: MediaDeviceInfo): void => {
-    if (camera.current) {
-      camera.current.switchCamera()
-    }
     setActiveDeviceId(device.deviceId)
   }
 
@@ -163,6 +160,12 @@ export const AppCameraComponent: React.FC<AppCameraComponentProps> = ({
       }
     })()
   }, [])
+
+  useEffect(() => {
+    if (camera.current) {
+      camera.current.switchCamera()
+    }
+  }, [activeDeviceId])
 
   const saveHandler = (): void => {
     onSave()
