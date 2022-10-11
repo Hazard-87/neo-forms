@@ -84,7 +84,8 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
       <form onSubmit={handleSubmit(submitHandler)} className={classNames('p-fluid', styles.forms)}>
         <div>
           <div className={styles.field}>
-            <span className="p-float-label">
+            <span className="p-float-label p-input-icon-right">
+              <i className="pi pi-building" />
               <Controller
                 name="company"
                 control={control}
@@ -102,10 +103,11 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
                 Организация
               </label>
             </span>
-            {getFormErrorMessage('name')}
+            {getFormErrorMessage('company')}
           </div>
           <div className={styles.field}>
-            <span className="p-float-label">
+            <span className="p-float-label p-input-icon-right">
+              <i className="pi pi-user" />
               <Controller
                 name="name"
                 control={control}
@@ -125,7 +127,8 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
             {getFormErrorMessage('name')}
           </div>
           <div className={styles.field}>
-            <span className="p-float-label">
+            <span className="p-float-label p-input-icon-right">
+              <i className="pi pi-phone" />
               <Controller
                 name="phone"
                 control={control}
@@ -144,7 +147,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
                 Телефон
               </label>
             </span>
-            {getFormErrorMessage('name')}
+            {getFormErrorMessage('phone')}
           </div>
           <div className={styles.field}>
             <span className="p-float-label p-input-icon-right">
@@ -162,6 +165,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
                 render={({ field, fieldState }) => (
                   <InputText
                     id={field.name}
+                    placeholder="example@email.com"
                     {...field}
                     className={classNames({ 'p-invalid': fieldState.invalid })}
                   />
