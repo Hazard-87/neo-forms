@@ -144,11 +144,10 @@ export const AppCameraComponent: React.FC<AppCameraComponentProps> = ({
   const [devices, setDevices] = useState<MediaDeviceInfo[]>([])
   const [activeDeviceId, setActiveDeviceId] = useState<string | undefined>(undefined)
 
-  const switchCamera = (device: MediaDeviceInfo): void => {
-    if (camera.current && activeDeviceId && activeDeviceId !== device.deviceId) {
+  const switchCamera = (): void => {
+    if (camera.current) {
       camera.current.switchCamera()
     }
-    setActiveDeviceId(device.deviceId)
   }
 
   useEffect(() => {
@@ -159,16 +158,14 @@ export const AppCameraComponent: React.FC<AppCameraComponentProps> = ({
       setDevices(videoDevices)
       const device = videoDevices[videoDevices.length - 1]
       if (device) {
-        switchCamera(device)
+        setActiveDeviceId(device.deviceId)
+        const index = videoDevices.findIndex((item) => item.deviceId === device.deviceId)
+        if (index > 0) {
+          switchCamera()
+        }
       }
     })()
   }, [])
-
-  // useEffect(() => {
-  //   if (camera.current) {
-  //     camera.current.switchCamera()
-  //   }
-  // }, [activeDeviceId])
 
   const saveHandler = (): void => {
     onSave()
@@ -182,7 +179,8 @@ export const AppCameraComponent: React.FC<AppCameraComponentProps> = ({
   const onChangeCamera = (): void => {
     const device = devices.find((item) => item.deviceId !== activeDeviceId)
     if (device) {
-      switchCamera(device)
+      setActiveDeviceId(device.deviceId)
+      switchCamera()
     }
   }
 
@@ -192,7 +190,6 @@ export const AppCameraComponent: React.FC<AppCameraComponentProps> = ({
 
   return (
     <Wrapper>
-      <span>{activeDeviceId}</span>
       {showImage ? (
         <FullScreenImagePreview
           image={image}
