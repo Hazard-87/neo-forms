@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import { InputText } from 'primereact/inputtext'
+import { RadioButton } from 'primereact/radiobutton'
 import { InputMask } from 'primereact/inputmask'
 import { Button } from 'primereact/button'
 import { AutoComplete } from 'primereact/autocomplete'
@@ -8,10 +9,12 @@ import { classNames } from 'primereact/utils'
 import { Image } from 'primereact/image'
 import styles from './RegistrationForm.module.scss'
 import { api } from '../../service'
+import { AppCameraComponent } from '../AppCameraComponent/AppCameraComponent'
 
 export interface Data {
   company: string
   name: string
+  category: string
   phone: string
   email: string
   city: string | null
@@ -19,19 +22,32 @@ export interface Data {
 
 interface RegistrationFormProps {
   photos: string[]
-  openCamera: () => void
+  addPhoto: (photo: string) => void
   onSubmit: (data: Data) => void
+  removePhotos: () => void
 }
 
 export const RegistrationForm: React.FC<RegistrationFormProps> = ({
   photos,
-  openCamera,
+  addPhoto,
+  removePhotos,
   onSubmit
 }) => {
+  const categories = [
+    { name: 'Салон', key: 'A' },
+    { name: 'Дизайнер интерьера', key: 'M' },
+    {
+      name: 'Выездной дизайнер',
+      key: 'P'
+    }
+  ]
+  const [selectedCategory, setSelectedCategory] = useState(categories[0])
+  const [visible, setVisible] = React.useState(false)
   const [cities, setCities] = useState<string[]>([])
   const defaultValues: Data = {
     company: '',
     name: '',
+    category: '',
     phone: '',
     email: '',
     city: null
@@ -44,9 +60,12 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
     reset
   } = useForm({ defaultValues })
 
-  const submitHandler = (data: Data) => {
-    onSubmit(data)
+  const submitHandler = (data: Data): void => {
+    const formData = { ...data }
+    formData.category = selectedCategory.name
+    onSubmit(formData)
     reset()
+    removePhotos()
   }
 
   const getFormErrorMessage = (name: 'name' | 'email' | 'company' | 'phone') => {
@@ -77,6 +96,18 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
     setTimeout(async () => {
       await loadCities(event.query)
     }, 500)
+  }
+
+  const onClear = () => {
+    reset()
+    removePhotos()
+    setTimeout(() => {
+      reset()
+    }, 100)
+  }
+
+  if (visible) {
+    return <AppCameraComponent addPhoto={addPhoto} onClose={() => setVisible(false)} />
   }
 
   return (
@@ -125,6 +156,33 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
               </label>
             </span>
             {getFormErrorMessage('name')}
+          </div>
+          <div className={styles.field}>
+            <div className={styles.label}>Тип организации:</div>
+            <Controller
+              name="category"
+              control={control}
+              render={({ field }) => (
+                <>
+                  {categories.map((category) => {
+                    return (
+                      <div key={category.key} className={styles.radio}>
+                        <RadioButton
+                          inputId={category.key}
+                          name={field.name}
+                          value={category}
+                          onChange={(e) => setSelectedCategory(e.value)}
+                          checked={selectedCategory.key === category.key}
+                        />
+                        <label htmlFor={category.key} className={styles.radioLabel}>
+                          {category.name}
+                        </label>
+                      </div>
+                    )
+                  })}
+                </>
+              )}
+            />
           </div>
           <div className={styles.field}>
             <span className="p-float-label p-input-icon-right">
@@ -197,10 +255,9 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
           </div>
 
           <Button
-            type="submit"
             label="Приложить визитку"
             className="p-button-outlined"
-            onClick={openCamera}
+            onClick={() => setVisible(true)}
           />
           <div className={styles.board}>
             {photos.map((item) => (
@@ -209,13 +266,11 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
           </div>
         </div>
 
-        <div>
-          <Button type="submit" label="Отправить" />
-          <div className={styles.mt}>
-            <Button type="submit" label="Очистить" className="p-button-text" />
-          </div>
-        </div>
+        <Button type="submit" label="Отправить" onSubmit={handleSubmit(submitHandler)} />
       </form>
+      <div className={styles.mt}>
+        <Button label="Очистить" className="p-button-text" onClick={onClear} />
+      </div>
     </div>
   )
 }

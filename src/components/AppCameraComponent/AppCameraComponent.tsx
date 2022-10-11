@@ -2,7 +2,6 @@ import React, { useState, useRef, useEffect } from 'react'
 import { Camera, CameraType } from 'react-camera-pro'
 import styled from 'styled-components'
 import { Button as Pbutton } from 'primereact/button'
-import styles from './AppCameraComponent.module.scss'
 
 const Wrapper = styled.div`
   position: fixed;
@@ -127,16 +126,11 @@ const FullScreenImagePreview = styled.div<{ image: string | null }>`
 `
 
 interface AppCameraComponentProps {
-  onSave: () => void
-  onCancel: () => void
+  onClose: () => void
   addPhoto: (photo: string) => void
 }
 
-export const AppCameraComponent: React.FC<AppCameraComponentProps> = ({
-  onSave,
-  onCancel,
-  addPhoto
-}) => {
+export const AppCameraComponent: React.FC<AppCameraComponentProps> = ({ onClose, addPhoto }) => {
   const [numberOfCameras, setNumberOfCameras] = useState(0)
   const [image, setImage] = useState<string | null>(null)
   const [showImage, setShowImage] = useState<boolean>(false)
@@ -158,10 +152,6 @@ export const AppCameraComponent: React.FC<AppCameraComponentProps> = ({
       setDevices(videoDevices)
     })()
   }, [])
-
-  const saveHandler = (): void => {
-    onSave()
-  }
 
   const takePhoto = (photo: string): void => {
     addPhoto(photo)
@@ -227,21 +217,12 @@ export const AppCameraComponent: React.FC<AppCameraComponentProps> = ({
             }
           }}
         />
-        <div className={styles.buttons}>
-          <Pbutton
-            disabled={!image}
-            icon="pi pi-check"
-            className="p-button-rounded p-button-outlined"
-            aria-label="Сохранить"
-            onClick={saveHandler}
-          />
-          <Pbutton
-            icon="pi pi-times"
-            className="p-button-rounded p-button-danger p-button-outlined"
-            aria-label="Отмена"
-            onClick={onCancel}
-          />
-        </div>
+        <Pbutton
+          icon="pi pi-times"
+          className="p-button-rounded p-button-danger p-button-outlined"
+          aria-label="Закрыть"
+          onClick={onClose}
+        />
       </Control>
     </Wrapper>
   )
