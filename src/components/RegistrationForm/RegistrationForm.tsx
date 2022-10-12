@@ -32,16 +32,20 @@ export interface Data {
 
 interface RegistrationFormProps {
   photos: string[]
+  localFiles: FormData[]
   addPhoto: (photo: string) => void
   onSubmit: (data: FormData) => void
   removePhotos: () => void
+  submitLocal: () => void
 }
 
 export const RegistrationForm: React.FC<RegistrationFormProps> = ({
   photos,
+  localFiles,
   addPhoto,
   removePhotos,
-  onSubmit
+  onSubmit,
+  submitLocal
 }) => {
   const categories = [
     { name: 'Салон', key: 'A' },
@@ -73,11 +77,6 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
 
   const submitHandler = (data: Data): void => {
     const formData: FormData = { ...data, photos, category: selectedCategory.name, id: Date.now() }
-    const item = localStorage.getItem('formData')
-    const itemData = item ? JSON.parse(item) : []
-    itemData.push(formData)
-    localStorage.setItem('formData', JSON.stringify(itemData))
-
     onSubmit(formData)
     reset()
     removePhotos()
@@ -296,6 +295,11 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
 
         <div className={styles.mt}>
           <Button type="submit" label="Отправить" onSubmit={handleSubmit(submitHandler)} />
+          {localFiles.length ? (
+            <div className={styles.clear} onClick={submitLocal}>
+              Отправить сохраненные данные
+            </div>
+          ) : null}
           <div className={styles.clear} onClick={confirm}>
             Очистить
           </div>
