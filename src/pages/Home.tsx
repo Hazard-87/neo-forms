@@ -1,8 +1,9 @@
-import React from 'react'
-import { Data, RegistrationForm } from '../components/RegistrationForm/RegistrationForm'
+import React, { useRef } from 'react'
+import { FormData, RegistrationForm } from '../components/RegistrationForm/RegistrationForm'
 import styles from '../styles/Home.module.scss'
 import { initializeApp } from 'firebase/app'
 import { getFirestore, collection, addDoc } from 'firebase/firestore'
+import { Toast } from 'primereact/toast'
 
 const Home = () => {
   const firebaseConfig = {
@@ -18,27 +19,38 @@ const Home = () => {
   const app = initializeApp(firebaseConfig)
   const db = getFirestore(app)
 
+  const toast = useRef(null)
   const [photos, setPhotos] = React.useState<string[]>([])
 
-  interface Body extends Data {
-    photos?: string[]
-  }
-
-  const postData = async (data: Body) => {
+  const handleSubmit = async (data: FormData) => {
     try {
-      const docRef = await addDoc(collection(db, 'forms'), data)
-      console.log('Document written with ID: ', docRef.id)
+      await addDoc(collection(db, 'forms'), data)
+      if (toast.current) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        //@ts-ignore
+        toast.current.show({
+          severity: 'success',
+          summary: 'Успешно',
+          detail: 'Данные успешно отправлены'
+        })
+      }
+      const items = localStorage.getItem('formData')
+      if (items) {
+        const formData = JSON.parse(items).filter((item: FormData) => item.id !== data.id)
+        localStorage.setItem('formData', JSON.stringify(formData))
+      }
     } catch (e) {
-      console.error('Error adding document: ', e)
+      if (toast.current) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        //@ts-ignore
+        toast.current.show({
+          severity: 'error',
+          summary: 'Ошибка',
+          detail:
+            'Произошла ошибка. Данные сохранены и будут отправлены при подключении к интернету'
+        })
+      }
     }
-  }
-
-  const handleSubmit = async (data: Data) => {
-    const body = {
-      ...data,
-      photos
-    }
-    await postData(body)
   }
 
   const addPhoto = (photo: string) => {
@@ -50,6 +62,7 @@ const Home = () => {
 
   return (
     <div className={styles.content}>
+      <Toast ref={toast} position="center" />
       <RegistrationForm
         photos={photos}
         onSubmit={handleSubmit}

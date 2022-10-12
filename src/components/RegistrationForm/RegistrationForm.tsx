@@ -10,6 +10,16 @@ import { Image } from 'primereact/image'
 import styles from './RegistrationForm.module.scss'
 import { api } from '../../service'
 import { AppCameraComponent } from '../AppCameraComponent/AppCameraComponent'
+import { ConfirmDialog, confirmDialog } from 'primereact/confirmdialog'
+
+export interface IData extends Data {
+  id: number
+}
+
+export interface FormData extends Data {
+  id: number
+  photos: string[]
+}
 
 export interface Data {
   company: string
@@ -23,7 +33,7 @@ export interface Data {
 interface RegistrationFormProps {
   photos: string[]
   addPhoto: (photo: string) => void
-  onSubmit: (data: Data) => void
+  onSubmit: (data: FormData) => void
   removePhotos: () => void
 }
 
@@ -41,10 +51,11 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
       key: 'P'
     }
   ]
+
   const [selectedCategory, setSelectedCategory] = useState(categories[0])
   const [visible, setVisible] = React.useState(false)
   const [cities, setCities] = useState<string[]>([])
-  const defaultValues: Data = {
+  const values: Data = {
     company: '',
     name: '',
     category: '',
@@ -58,11 +69,15 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
     formState: { errors },
     handleSubmit,
     reset
-  } = useForm({ defaultValues })
+  } = useForm({ defaultValues: values })
 
   const submitHandler = (data: Data): void => {
-    const formData = { ...data }
-    formData.category = selectedCategory.name
+    const formData: FormData = { ...data, photos, category: selectedCategory.name, id: Date.now() }
+    const item = localStorage.getItem('formData')
+    const itemData = item ? JSON.parse(item) : []
+    itemData.push(formData)
+    localStorage.setItem('formData', JSON.stringify(itemData))
+
     onSubmit(formData)
     reset()
     removePhotos()
@@ -106,12 +121,25 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
     }, 100)
   }
 
+  const confirm = () => {
+    confirmDialog({
+      message: 'Вы действительно хотите очистить данные?',
+      header: 'Удаление данных формы',
+      icon: 'pi pi-info-circle',
+      acceptClassName: 'p-button-danger',
+      acceptLabel: 'Да',
+      rejectLabel: 'Нет',
+      accept: onClear
+    })
+  }
+
   if (visible) {
     return <AppCameraComponent addPhoto={addPhoto} onClose={() => setVisible(false)} />
   }
 
   return (
     <div className={styles.card}>
+      <ConfirmDialog />
       <form onSubmit={handleSubmit(submitHandler)} className={classNames('p-fluid', styles.forms)}>
         <div>
           <div className={styles.field}>
@@ -266,10 +294,10 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
           </div>
         </div>
 
-        <div>
+        <div className={styles.mt}>
           <Button type="submit" label="Отправить" onSubmit={handleSubmit(submitHandler)} />
-          <div className={styles.mt}>
-            <Button label="Очистить" className="p-button-text" onClick={onClear} />
+          <div className={styles.clear} onClick={confirm}>
+            Очистить
           </div>
         </div>
       </form>
