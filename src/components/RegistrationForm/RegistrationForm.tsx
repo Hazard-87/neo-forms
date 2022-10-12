@@ -217,7 +217,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
               <Controller
                 name="phone"
                 control={control}
-                rules={{ required: 'Поле обязательное' }}
+                rules={{ required: 'Введите действительный номер телефона' }}
                 render={({ field, fieldState }) => (
                   <InputMask
                     id={field.name}
@@ -273,6 +273,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
                     {...field}
                     suggestions={cities}
                     completeMethod={searchCity}
+                    placeholder="Город, регион"
                     aria-label="Город"
                   />
                 )}
