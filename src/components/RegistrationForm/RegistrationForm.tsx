@@ -147,7 +147,6 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
               <Controller
                 name="company"
                 control={control}
-                rules={{ required: 'Поле обязательное' }}
                 render={({ field, fieldState }) => (
                   <InputText
                     id={field.name}
@@ -169,7 +168,6 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
               <Controller
                 name="name"
                 control={control}
-                rules={{ required: 'Поле обязательное' }}
                 render={({ field, fieldState }) => (
                   <InputText
                     id={field.name}
@@ -217,7 +215,6 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
               <Controller
                 name="phone"
                 control={control}
-                rules={{ required: 'Введите действительный номер телефона' }}
                 render={({ field, fieldState }) => (
                   <InputMask
                     id={field.name}
@@ -241,7 +238,6 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
                 name="email"
                 control={control}
                 rules={{
-                  required: 'Поле обязательное',
                   pattern: {
                     value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
                     message: 'Неверная почта. Пример example@email.com'
