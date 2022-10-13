@@ -117,21 +117,21 @@ const Home = () => {
 
   return (
     <div className={styles.content}>
-      <Toast ref={toast} position="center" />
+      <Toast ref={toast} position="bottom-center" />
       {fetching ? (
         <div className={styles.center}>
           <ProgressSpinner />
         </div>
-      ) : (
-        <RegistrationForm
-          photos={photos}
-          localFiles={localFiles}
-          onSubmit={handleSubmit}
-          submitLocal={submitLocal}
-          addPhoto={addPhoto}
-          removePhotos={removePhotos}
-        />
-      )}
+      ) : null}
+
+      <RegistrationForm
+        photos={photos}
+        localFiles={localFiles}
+        onSubmit={handleSubmit}
+        submitLocal={submitLocal}
+        addPhoto={addPhoto}
+        removePhotos={removePhotos}
+      />
     </div>
   )
 }

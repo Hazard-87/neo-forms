@@ -2,15 +2,15 @@ import React, { useState } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import { InputText } from 'primereact/inputtext'
 import { RadioButton } from 'primereact/radiobutton'
-import { InputMask } from 'primereact/inputmask'
 import { Button } from 'primereact/button'
 import { AutoComplete } from 'primereact/autocomplete'
 import { classNames } from 'primereact/utils'
 import { Image } from 'primereact/image'
 import styles from './RegistrationForm.module.scss'
-import { api } from '../../service'
 import { AppCameraComponent } from '../AppCameraComponent/AppCameraComponent'
 import { ConfirmDialog, confirmDialog } from 'primereact/confirmdialog'
+import cities from '../../lib/cities'
+import emails from '../../lib/emails'
 
 export interface IData extends Data {
   id: number
@@ -58,7 +58,8 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
 
   const [selectedCategory, setSelectedCategory] = useState(categories[0])
   const [visible, setVisible] = React.useState(false)
-  const [cities, setCities] = useState<string[]>([])
+  const [filteredCities, setFilteredCities] = useState<string[]>([])
+  const [filteredMails, setFilteredMails] = useState<string[]>([])
   const values: Data = {
     company: '',
     name: '',
@@ -86,23 +87,27 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
     return errors[name] && <small className="p-error">{errors[name]?.message}</small>
   }
 
-  const loadCities = async (query: string) => {
-    try {
-      const res = await api.getCities({ query, count: 20 })
-      const cityData = res.data.filter(
-        (item: any) => item.data.city && item.data.city.toLowerCase().includes(query.toLowerCase())
-      )
+  const loadCities = (query: string) => {
+    const cityData = cities.filter((item) => item.city.toLowerCase().includes(query.toLowerCase()))
+    const items = cityData.map((item) => item.city + ', ' + item.region)
+    setFilteredCities(items)
+  }
 
-      const filteredCities: string[] = []
-      cityData.map((item: any) => {
-        const text = item.data.city + ', ' + item.data.region_with_type
-        if (!filteredCities.includes(text)) {
-          filteredCities.push(text)
-        }
-      })
-      setCities(filteredCities)
-    } catch (e) {
-      console.log(e)
+  const loadMails = (query: string) => {
+    if (query && query[query.length - 1] === '@') {
+      const items = emails.map((item) => query + item)
+      setFilteredMails(items)
+    } else if (query && !query.includes('@')) {
+      setFilteredMails([])
+    } else {
+      const text = query.split('@')
+      const items = emails
+        .filter((item) => item.includes(text[1]))
+        .map((item) => {
+          const queryText = query.split('@')
+          return queryText[0] + '@' + item
+        })
+      setFilteredMails(items)
     }
   }
 
@@ -110,6 +115,10 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
     setTimeout(async () => {
       await loadCities(event.query)
     }, 500)
+  }
+
+  const searchMails = (event: { query: string }) => {
+    loadMails(event.query)
   }
 
   const onClear = () => {
@@ -216,11 +225,11 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
                 name="phone"
                 control={control}
                 render={({ field, fieldState }) => (
-                  <InputMask
+                  <InputText
                     id={field.name}
+                    keyfilter={/[0-9-+()]/i}
+                    type="number"
                     {...field}
-                    mask="+7 (999) 999-99-99"
-                    placeholder="+7 (999) 999-99-99"
                     className={classNames({ 'p-invalid': fieldState.invalid })}
                   />
                 )}
@@ -244,10 +253,13 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
                   }
                 }}
                 render={({ field, fieldState }) => (
-                  <InputText
+                  <AutoComplete
                     id={field.name}
-                    placeholder="example@email.com"
                     {...field}
+                    suggestions={filteredMails}
+                    completeMethod={searchMails}
+                    placeholder="example@email.com"
+                    aria-label="Почта"
                     className={classNames({ 'p-invalid': fieldState.invalid })}
                   />
                 )}
@@ -267,7 +279,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
                   <AutoComplete
                     id={field.name}
                     {...field}
-                    suggestions={cities}
+                    suggestions={filteredCities}
                     completeMethod={searchCity}
                     placeholder="Город, регион"
                     aria-label="Город"
