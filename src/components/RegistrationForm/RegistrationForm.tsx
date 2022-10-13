@@ -31,6 +31,7 @@ export interface Data {
 }
 
 interface RegistrationFormProps {
+  defaultValues: Data
   photos: string[]
   localFiles: FormData[]
   addPhoto: (photo: string) => void
@@ -40,6 +41,7 @@ interface RegistrationFormProps {
 }
 
 export const RegistrationForm: React.FC<RegistrationFormProps> = ({
+  defaultValues,
   photos,
   localFiles,
   addPhoto,
@@ -60,21 +62,13 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
   const [visible, setVisible] = React.useState(false)
   const [filteredCities, setFilteredCities] = useState<string[]>([])
   const [filteredMails, setFilteredMails] = useState<string[]>([])
-  const values: Data = {
-    company: '',
-    name: '',
-    category: '',
-    phone: '',
-    email: '',
-    city: null
-  }
 
   const {
     control,
     formState: { errors },
     handleSubmit,
     reset
-  } = useForm({ defaultValues: values })
+  } = useForm({ defaultValues })
 
   const submitHandler = (data: Data): void => {
     const formData: FormData = { ...data, photos, category: selectedCategory.name, id: Date.now() }

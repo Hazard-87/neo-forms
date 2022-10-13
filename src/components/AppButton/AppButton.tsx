@@ -3,13 +3,14 @@ import { Button } from 'primereact/button'
 
 interface AppButtonProps {
   label: string
-  onClick: () => void
+  className?: string
+  onClick?: () => void
 }
 
-export const AppButton: React.FC<AppButtonProps> = ({ label, onClick }) => {
+export const AppButton: React.FC<AppButtonProps> = ({ label, className, onClick }) => {
   return (
     <>
-      <Button label={label} onClick={onClick} />
+      <Button label={label} onClick={onClick} className={className} />
     </>
   )
 }

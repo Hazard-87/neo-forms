@@ -1,29 +1,27 @@
-import React, { useRef } from 'react'
-import { FormData, RegistrationForm } from '../components/RegistrationForm/RegistrationForm'
+import React, { useContext, useRef } from 'react'
+import { Data, FormData, RegistrationForm } from '../components/RegistrationForm/RegistrationForm'
 import styles from '../styles/Home.module.scss'
-import { initializeApp } from 'firebase/app'
-import { getFirestore, collection, addDoc } from 'firebase/firestore'
 import { Toast } from 'primereact/toast'
 import { ProgressSpinner } from 'primereact/progressspinner'
+import { Link } from 'react-router-dom'
+import { AppButton } from '../components/AppButton/AppButton'
+import { Context } from '../index'
 
 const Home = () => {
-  const firebaseConfig = {
-    apiKey: 'AIzaSyD_QPzALXmaifGr89uXwnMukml_9x1Ak10',
-    authDomain: 'neo-forms.firebaseapp.com',
-    projectId: 'neo-forms',
-    storageBucket: 'neo-forms.appspot.com',
-    messagingSenderId: '629071013494',
-    appId: '1:629071013494:web:92af711be2972b62d9a157',
-    measurementId: 'G-M3TPRDJEWM'
-  }
-
-  const app = initializeApp(firebaseConfig)
-  const db = getFirestore(app)
-
+  const { addDoc, collection, db, setDoc, doc } = useContext(Context)
   const toast = useRef(null)
   const [fetching, setFetching] = React.useState<boolean>(false)
   const [photos, setPhotos] = React.useState<string[]>([])
   const [localFiles, setLocalFiles] = React.useState<FormData[]>([])
+
+  const values: Data = {
+    company: '',
+    name: '',
+    category: '',
+    phone: '',
+    email: '',
+    city: ''
+  }
 
   React.useEffect(() => {
     const item = localStorage.getItem('formData')
@@ -35,7 +33,7 @@ const Home = () => {
   const submitLocal = async () => {
     setFetching(true)
     const promise = localFiles.map((item: FormData) => {
-      return addDoc(collection(db, 'forms'), item)
+      return setDoc(doc(db, 'forms', item.id.toString()), item)
     })
     Promise.all(promise)
       .then(() => {
@@ -76,7 +74,7 @@ const Home = () => {
 
     try {
       setFetching(true)
-      await addDoc(collection(db, 'forms'), data)
+      await setDoc(doc(db, 'forms', data.id.toString()), data)
       if (toast.current) {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         //@ts-ignore
@@ -125,6 +123,7 @@ const Home = () => {
       ) : null}
 
       <RegistrationForm
+        defaultValues={values}
         photos={photos}
         localFiles={localFiles}
         onSubmit={handleSubmit}
@@ -132,6 +131,9 @@ const Home = () => {
         addPhoto={addPhoto}
         removePhotos={removePhotos}
       />
+      <Link to="/result">
+        <AppButton label="Заполненные данные" className="p-button-text" />
+      </Link>
     </div>
   )
 }
