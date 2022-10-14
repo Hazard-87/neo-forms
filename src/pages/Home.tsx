@@ -6,6 +6,7 @@ import { ProgressSpinner } from 'primereact/progressspinner'
 import { Link } from 'react-router-dom'
 import { AppButton } from '../components/AppButton/AppButton'
 import { Context } from '../index'
+import { AppSpinner } from '../components/AppSpinner/AppSpinner'
 
 const Home = () => {
   const { addDoc, collection, db, setDoc, doc } = useContext(Context)
@@ -116,11 +117,7 @@ const Home = () => {
   return (
     <div className={styles.content}>
       <Toast ref={toast} position="bottom-center" />
-      {fetching ? (
-        <div className={styles.center}>
-          <ProgressSpinner />
-        </div>
-      ) : null}
+      <AppSpinner fetching={fetching} />
 
       <RegistrationForm
         defaultValues={values}

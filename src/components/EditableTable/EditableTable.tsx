@@ -1,12 +1,17 @@
-import React, { useState } from 'react'
+import React, { LegacyRef } from 'react'
 import { DataTable } from 'primereact/datatable'
 import { Column } from 'primereact/column'
 import { InputText } from 'primereact/inputtext'
+import { Carousel } from 'primereact'
+import { Image } from 'primereact/image'
 import { IFormData } from '../../interfaces/IFormData'
-import { Paginator } from 'primereact/paginator'
+import { IColumn } from '../../lib/columns'
+import styles from './EditableTable.module.scss'
 
 interface EditableTableProps {
+  dt?: LegacyRef<DataTable>
   data: IFormData[]
+  columns: IColumn[]
   onChange: (data: IFormData) => void
 }
 
@@ -17,10 +22,7 @@ interface RowEvent {
   field: string
 }
 
-export const EditableTable: React.FC<EditableTableProps> = ({ data, onChange }) => {
-  const [page, setPage] = useState(3)
-  const [rows, setRows] = useState(10)
-
+export const EditableTable: React.FC<EditableTableProps> = ({ dt, data, columns, onChange }) => {
   const onRowEditComplete = (e: RowEvent) => {
     onChange(e.newData)
   }
@@ -35,32 +37,38 @@ export const EditableTable: React.FC<EditableTableProps> = ({ data, onChange }) 
     )
   }
 
-  const columns = [
-    { field: 'company', header: 'Организация', width: '10%' },
-    { field: 'name', header: 'Имя', width: '10%' },
-    { field: 'category', header: 'Тип организации', width: '10%' },
-    { field: 'phone', header: 'Телефон', width: '10%' },
-    { field: 'email', header: 'Почта', width: '10%' },
-    { field: 'city', header: 'Город', width: '10%' },
-    { field: 'info', header: 'Описание', width: '10%' },
-    { field: 'editor', width: '10%' }
-  ]
+  const productTemplate = (product: string) => {
+    return <Image src={product} alt="photo" imageClassName={styles.image} preview />
+  }
 
-  const pageChange = (e: any) => {
-    setPage(e.page)
-    setRows(e.rows)
+  const imageBodyTemplate = (rowData: IFormData) => {
+    const src = rowData.photos.length ? rowData.photos[rowData.photos.length - 1] : ''
+    if (src) {
+      return (
+        <Carousel
+          value={rowData.photos}
+          numVisible={1}
+          numScroll={1}
+          itemTemplate={productTemplate}
+          verticalViewPortHeight="90px"
+        />
+      )
+    } else {
+      return <span>Нет фото</span>
+    }
   }
 
   return (
     <>
       <DataTable
+        ref={dt}
         value={data}
         editMode="row"
         dataKey="id"
         onRowEditComplete={onRowEditComplete}
         responsiveLayout="scroll"
         paginator
-        rows={rows}
+        rows={10}
       >
         {columns.map(({ field, header, width }) => {
           return (
@@ -73,6 +81,7 @@ export const EditableTable: React.FC<EditableTableProps> = ({ data, onChange }) 
               rowEditor={field === 'editor'}
               headerStyle={field === 'editor' ? { minWidth: '8rem' } : {}}
               bodyStyle={field === 'editor' ? { textAlign: 'center' } : {}}
+              body={field === 'photos' ? imageBodyTemplate : null}
             />
           )
         })}

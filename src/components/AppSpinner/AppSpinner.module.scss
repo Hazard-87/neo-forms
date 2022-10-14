@@ -1,0 +1,9 @@
+.center {
+  position: fixed;
+  z-index: 999;
+  inset: 0;
+  background-color: rgba(255, 255, 255, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
