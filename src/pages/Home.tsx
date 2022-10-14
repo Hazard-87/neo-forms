@@ -8,7 +8,7 @@ import { Context } from '../index'
 import { AppProgressBar } from '../components/AppProgressBar/AppProgressBar'
 
 const Home = () => {
-  const { addDoc, collection, db, setDoc, doc } = useContext(Context)
+  const { db, setDoc, doc } = useContext(Context)
   const toast = useRef(null)
   const [fetching, setFetching] = React.useState<boolean>(false)
   const [photos, setPhotos] = React.useState<string[]>([])
@@ -114,24 +114,22 @@ const Home = () => {
   }
 
   return (
-    <div className={styles.page}>
-      <div className={styles.content}>
-        <Toast ref={toast} position="bottom-center" />
-        <AppProgressBar fetching={fetching} />
+    <div className={styles.content}>
+      <Toast ref={toast} position="bottom-center" />
+      <AppProgressBar fetching={fetching} />
 
-        <RegistrationForm
-          defaultValues={values}
-          photos={photos}
-          localFiles={localFiles}
-          onSubmit={handleSubmit}
-          submitLocal={submitLocal}
-          addPhoto={addPhoto}
-          removePhotos={removePhotos}
-        />
-        <Link to="/result">
-          <AppButton label="Заполненные данные" className="p-button-text" />
-        </Link>
-      </div>
+      <RegistrationForm
+        defaultValues={values}
+        photos={photos}
+        localFiles={localFiles}
+        onSubmit={handleSubmit}
+        submitLocal={submitLocal}
+        addPhoto={addPhoto}
+        removePhotos={removePhotos}
+      />
+      <Link to="/result" className={styles.link}>
+        <AppButton label="Заполненные данные" className="p-button-text" />
+      </Link>
     </div>
   )
 }

@@ -6,18 +6,13 @@
 }
 
 .card {
-  margin-top: -20px;
   min-width: 450px;
   padding: 20px;
   height: calc(100% - 40px);
 }
 
-.card form {
-  margin-top: 2rem;
-}
-
 .card .field {
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
 }
 
 @media screen and (max-width: 960px) {

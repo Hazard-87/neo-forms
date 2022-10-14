@@ -10,7 +10,7 @@ export const AppProgressBar: React.FC<AppSpinnerProps> = ({ fetching }) => {
   return (
     <>
       {fetching ? (
-        <div className="card">
+        <div className={styles.wrapper}>
           <div className={styles.progress}>
             <ProgressBar mode="indeterminate" style={{ height: '6px' }} />
           </div>
