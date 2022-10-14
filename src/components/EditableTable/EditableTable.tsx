@@ -7,6 +7,7 @@ import { Image } from 'primereact/image'
 import { IFormData } from '../../interfaces/IFormData'
 import { IColumn } from '../../lib/columns'
 import styles from './EditableTable.module.scss'
+import { ImageBodyTemplate } from '../ImageBodyTempale/ImageBodyTemplate'
 
 interface EditableTableProps {
   dt?: LegacyRef<DataTable>
@@ -28,12 +29,19 @@ export const EditableTable: React.FC<EditableTableProps> = ({ dt, data, columns,
   }
 
   const textEditor = (options: any) => {
+    console.log(options)
     return (
-      <InputText
-        type="text"
-        value={options.value}
-        onChange={(e) => options.editorCallback(e.target.value)}
-      />
+      <>
+        {options.field !== 'photos' ? (
+          <InputText
+            type="text"
+            value={options.value}
+            onChange={(e) => options.editorCallback(e.target.value)}
+          />
+        ) : (
+          <ImageBodyTemplate data={options.rowData} />
+        )}
+      </>
     )
   }
 
@@ -41,7 +49,7 @@ export const EditableTable: React.FC<EditableTableProps> = ({ dt, data, columns,
     return <Image src={product} alt="photo" imageClassName={styles.image} preview />
   }
 
-  const imageBodyTemplate = (rowData: IFormData) => {
+  const imageBodyTemplate = (rowData: IFormData): JSX.Element => {
     const src = rowData.photos.length ? rowData.photos[rowData.photos.length - 1] : ''
     if (src) {
       return (
