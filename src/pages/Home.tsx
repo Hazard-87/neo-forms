@@ -2,11 +2,10 @@ import React, { useContext, useRef } from 'react'
 import { Data, FormData, RegistrationForm } from '../components/RegistrationForm/RegistrationForm'
 import styles from '../styles/Home.module.scss'
 import { Toast } from 'primereact/toast'
-import { ProgressSpinner } from 'primereact/progressspinner'
 import { Link } from 'react-router-dom'
 import { AppButton } from '../components/AppButton/AppButton'
 import { Context } from '../index'
-import { AppSpinner } from '../components/AppSpinner/AppSpinner'
+import { AppProgressBar } from '../components/AppProgressBar/AppProgressBar'
 
 const Home = () => {
   const { addDoc, collection, db, setDoc, doc } = useContext(Context)
@@ -115,22 +114,24 @@ const Home = () => {
   }
 
   return (
-    <div className={styles.content}>
-      <Toast ref={toast} position="bottom-center" />
-      <AppSpinner fetching={fetching} />
+    <div className={styles.page}>
+      <div className={styles.content}>
+        <Toast ref={toast} position="bottom-center" />
+        <AppProgressBar fetching={fetching} />
 
-      <RegistrationForm
-        defaultValues={values}
-        photos={photos}
-        localFiles={localFiles}
-        onSubmit={handleSubmit}
-        submitLocal={submitLocal}
-        addPhoto={addPhoto}
-        removePhotos={removePhotos}
-      />
-      <Link to="/result">
-        <AppButton label="Заполненные данные" className="p-button-text" />
-      </Link>
+        <RegistrationForm
+          defaultValues={values}
+          photos={photos}
+          localFiles={localFiles}
+          onSubmit={handleSubmit}
+          submitLocal={submitLocal}
+          addPhoto={addPhoto}
+          removePhotos={removePhotos}
+        />
+        <Link to="/result">
+          <AppButton label="Заполненные данные" className="p-button-text" />
+        </Link>
+      </div>
     </div>
   )
 }

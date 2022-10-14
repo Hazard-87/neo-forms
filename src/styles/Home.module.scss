@@ -1,4 +1,12 @@
+.page {
+  min-height: 100vh;
+  min-width: 100vw;
+  display: flex;
+  justify-content: center;
+}
+
 .content {
+  position: absolute;
   min-height: 100vh;
   max-width: 500px;
   margin: 0 auto;
