@@ -1,13 +1,11 @@
 .page {
+  margin: 0 auto;
   min-height: 100vh;
-  min-width: 100vw;
-  display: flex;
-  justify-content: center;
+  max-width: 500px;
+  position: relative;
 }
 
 .content {
   position: absolute;
-  min-height: 100vh;
-  max-width: 500px;
-  margin: 0 auto;
+  inset: 0;
 }
