@@ -21,7 +21,7 @@ import {
   doc,
   setDoc
 } from 'firebase/firestore'
-import reportWebVitals from './reportWebVitals'
+// import reportWebVitals from './reportWebVitals'
 
 export const Context = createContext(null as any)
 
@@ -59,4 +59,4 @@ root.render(
   </Context.Provider>
 )
 
-reportWebVitals()
+// reportWebVitals()
