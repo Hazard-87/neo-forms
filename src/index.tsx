@@ -60,6 +60,6 @@ root.render(
   </Context.Provider>
 )
 
-serviceWorkerRegistration.unregister()
+serviceWorkerRegistration.register()
 
 reportWebVitals()
