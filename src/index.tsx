@@ -21,6 +21,7 @@ import {
   doc,
   setDoc
 } from 'firebase/firestore'
+import * as serviceWorkerRegistration from './serviceWorkerRegistration'
 import reportWebVitals from './reportWebVitals'
 
 export const Context = createContext(null as any)
@@ -58,5 +59,7 @@ root.render(
     <App />
   </Context.Provider>
 )
+
+serviceWorkerRegistration.unregister()
 
 reportWebVitals()
