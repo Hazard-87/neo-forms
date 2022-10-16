@@ -5,6 +5,7 @@ export default <IColumn[]>[
   { field: 'phone', header: 'Телефон', width: '10%' },
   { field: 'email', header: 'Почта', width: '10%' },
   { field: 'city', header: 'Город', width: '10%' },
+  { field: 'comment', header: 'Комментарий', width: '10%' },
   { field: 'info', header: 'Описание', width: '10%' },
   { field: 'photos', header: 'Фото', width: '10%' },
   { field: 'editor', width: '10%' }

@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import { InputText } from 'primereact/inputtext'
+import { InputTextarea } from 'primereact/inputtextarea'
 import { RadioButton } from 'primereact/radiobutton'
 import { Button } from 'primereact/button'
 import { AutoComplete } from 'primereact/autocomplete'
@@ -27,7 +28,8 @@ export interface Data {
   category: string
   phone: string
   email: string
-  city: string | null
+  city: string
+  comment: string
 }
 
 interface RegistrationFormProps {
@@ -281,6 +283,19 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
                 )}
               />
               <label htmlFor="city">Город</label>
+            </span>
+          </div>
+          <div className={styles.field}>
+            <span className="p-float-label p-input-icon-right">
+              <i className="pi pi-comment" />
+              <Controller
+                name="comment"
+                control={control}
+                render={({ field }) => (
+                  <InputTextarea id={field.name} {...field} rows={1} autoResize />
+                )}
+              />
+              <label htmlFor="comment">Комментарий</label>
             </span>
           </div>
 

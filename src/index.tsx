@@ -23,18 +23,12 @@ import {
 } from 'firebase/firestore'
 import * as serviceWorkerRegistration from './serviceWorkerRegistration'
 import reportWebVitals from './reportWebVitals'
+import config from './config'
 
 export const Context = createContext(null as any)
 
-const app = initializeApp({
-  apiKey: 'AIzaSyD_QPzALXmaifGr89uXwnMukml_9x1Ak10',
-  authDomain: 'neo-forms.firebaseapp.com',
-  projectId: 'neo-forms',
-  storageBucket: 'neo-forms.appspot.com',
-  messagingSenderId: '629071013494',
-  appId: '1:629071013494:web:92af711be2972b62d9a157',
-  measurementId: 'G-M3TPRDJEWM'
-})
+const env = process.env.NODE_ENV
+const app = initializeApp(config[env])
 const db = getFirestore(app)
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)

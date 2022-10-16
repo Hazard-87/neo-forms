@@ -6,6 +6,7 @@ export interface IFormData {
   phone: string
   email: string
   city: string
+  comment: string
   info?: string
   photos: []
 }

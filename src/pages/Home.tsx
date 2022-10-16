@@ -20,7 +20,8 @@ const Home = () => {
     category: '',
     phone: '',
     email: '',
-    city: ''
+    city: '',
+    comment: ''
   }
 
   React.useEffect(() => {
