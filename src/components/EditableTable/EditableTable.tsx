@@ -7,7 +7,7 @@ import { Image } from 'primereact/image'
 import { IFormData } from '../../interfaces/IFormData'
 import { IColumn } from '../../lib/columns'
 import styles from './EditableTable.module.scss'
-import { ImageBodyTemplate } from '../ImageBodyTempale/ImageBodyTemplate'
+import { ImageBodyTemplate } from '../ImageBodyTemplate/ImageBodyTemplate'
 
 interface EditableTableProps {
   dt?: LegacyRef<DataTable>
