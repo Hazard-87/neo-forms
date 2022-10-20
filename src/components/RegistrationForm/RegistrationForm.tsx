@@ -12,32 +12,15 @@ import { AppCameraComponent } from '../AppCameraComponent/AppCameraComponent'
 import { ConfirmDialog, confirmDialog } from 'primereact/confirmdialog'
 import cities from '../../lib/cities'
 import emails from '../../lib/emails'
-
-export interface IData extends Data {
-  id: number
-}
-
-export interface FormData extends Data {
-  id: number
-  photos: string[]
-}
-
-export interface Data {
-  company: string
-  name: string
-  category: string
-  phone: string
-  email: string
-  city: string
-  comment: string
-}
+import { Data, IFormData } from '../../interfaces/DataTypes'
+import moment from 'moment'
 
 interface RegistrationFormProps {
   defaultValues: Data
   photos: string[]
-  localFiles: FormData[]
+  localFiles: IFormData[]
   addPhoto: (photo: string) => void
-  onSubmit: (data: FormData) => void
+  onSubmit: (data: IFormData) => void
   removePhotos: () => void
   submitLocal: () => void
 }
@@ -73,7 +56,14 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
   } = useForm({ defaultValues })
 
   const submitHandler = (data: Data): void => {
-    const formData: FormData = { ...data, photos, category: selectedCategory.name, id: Date.now() }
+    const date = moment(new Date()).format('DD.MM.YYYY HH:mm:ss')
+    const formData: IFormData = {
+      ...data,
+      photos,
+      category: selectedCategory.name,
+      id: Date.now(),
+      createdAt: date
+    }
     onSubmit(formData)
     reset()
     removePhotos()

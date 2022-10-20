@@ -2,7 +2,7 @@ import React from 'react'
 import { Carousel } from 'primereact'
 import { Image } from 'primereact/image'
 import styles from '../EditableTable/EditableTable.module.scss'
-import { IFormData } from '../../interfaces/IFormData'
+import { IFormData } from '../../interfaces/DataTypes'
 
 interface ImageBodyTemplateProps {
   data: IFormData

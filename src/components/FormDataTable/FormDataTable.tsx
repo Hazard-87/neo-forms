@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { AppSpinner } from '../AppSpinner/AppSpinner'
 import { EditableTable } from '../EditableTable/EditableTable'
-import { IFormData } from '../../interfaces/IFormData'
+import { IFormData, SaveData } from '../../interfaces/DataTypes'
 import columns from '../../lib/columns'
 import { Context } from '../../index'
 import styles from './FormDataTable.module.scss'
@@ -25,6 +25,8 @@ export const FormDataTable: React.FC = () => {
       querySnapshot.forEach((doc: { data(): IFormData }) => {
         items.push(doc.data())
       })
+      const itemsData = items.map((item) => item)
+      console.log(itemsData)
       setData(items)
     } finally {
       setFetching(false)
@@ -52,21 +54,6 @@ export const FormDataTable: React.FC = () => {
     } finally {
       setFetching(false)
     }
-  }
-
-  // const exportCSV = (selectionOnly: boolean) => {
-  //   if (dt.current) {
-  //     dt.current.exportCSV({ selectionOnly })
-  //   }
-  // }
-
-  interface SaveData {
-    company: string
-    name: string
-    category: string
-    phone: string
-    email: string
-    city: string
   }
 
   type KeysType = 'company' | 'name' | 'category' | 'phone' | 'email' | 'city'

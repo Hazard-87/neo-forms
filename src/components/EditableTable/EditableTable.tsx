@@ -4,7 +4,7 @@ import { Column } from 'primereact/column'
 import { InputText } from 'primereact/inputtext'
 import { Carousel } from 'primereact'
 import { Image } from 'primereact/image'
-import { IFormData } from '../../interfaces/IFormData'
+import { IFormData } from '../../interfaces/DataTypes'
 import { IColumn } from '../../lib/columns'
 import styles from './EditableTable.module.scss'
 import { ImageBodyTemplate } from '../ImageBodyTemplate/ImageBodyTemplate'
@@ -29,7 +29,6 @@ export const EditableTable: React.FC<EditableTableProps> = ({ dt, data, columns,
   }
 
   const textEditor = (options: any) => {
-    console.log(options)
     return (
       <>
         {options.field !== 'photos' ? (
