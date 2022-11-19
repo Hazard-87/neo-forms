@@ -4,15 +4,15 @@ import styles from '../styles/Home.module.scss'
 import { Toast } from 'primereact/toast'
 import { Link } from 'react-router-dom'
 import { AppButton } from '../components/AppButton/AppButton'
-import { Context } from '../index'
+import { Context } from '../App'
 import { AppProgressBar } from '../components/AppProgressBar/AppProgressBar'
 import { Data, IFormData } from '../interfaces/DataTypes'
 
 const Home = () => {
-  const { db, setDoc, doc } = useContext(Context)
+  const { db, setDoc, doc, photos, setPhotos } = useContext(Context)
   const toast = useRef(null)
   const [fetching, setFetching] = React.useState<boolean>(false)
-  const [photos, setPhotos] = React.useState<string[]>([])
+  // const [photos, setPhotos] = React.useState<string[]>([])
   const [localFiles, setLocalFiles] = React.useState<IFormData[]>([])
 
   const values: Data = {
@@ -108,9 +108,6 @@ const Home = () => {
     }
   }
 
-  const addPhoto = (photo: string) => {
-    setPhotos([...photos, photo])
-  }
   const removePhotos = () => {
     setPhotos([])
   }
@@ -126,7 +123,6 @@ const Home = () => {
         localFiles={localFiles}
         onSubmit={handleSubmit}
         submitLocal={submitLocal}
-        addPhoto={addPhoto}
         removePhotos={removePhotos}
       />
       <Link to="/result" className={styles.link}>

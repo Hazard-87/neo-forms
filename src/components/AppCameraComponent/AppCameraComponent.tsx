@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react'
 import { Camera, CameraType } from 'react-camera-pro'
 import styled from 'styled-components'
 import { Button as Pbutton } from 'primereact/button'
+import { Link } from 'react-router-dom'
 
 const Wrapper = styled.div`
   position: fixed;
@@ -126,11 +127,10 @@ const FullScreenImagePreview = styled.div<{ image: string | null }>`
 `
 
 interface AppCameraComponentProps {
-  onClose: () => void
   addPhoto: (photo: string) => void
 }
 
-export const AppCameraComponent: React.FC<AppCameraComponentProps> = ({ onClose, addPhoto }) => {
+export const AppCameraComponent: React.FC<AppCameraComponentProps> = ({ addPhoto }) => {
   const [numberOfCameras, setNumberOfCameras] = useState(0)
   const [image, setImage] = useState<string | null>(null)
   const [showImage, setShowImage] = useState<boolean>(false)
@@ -217,12 +217,13 @@ export const AppCameraComponent: React.FC<AppCameraComponentProps> = ({ onClose,
             }
           }}
         />
-        <Pbutton
-          icon="pi pi-times"
-          className="p-button-rounded p-button-danger p-button-outlined"
-          aria-label="Закрыть"
-          onClick={onClose}
-        />
+        <Link to={'/'}>
+          <Pbutton
+            icon="pi pi-times"
+            className="p-button-rounded p-button-danger p-button-outlined"
+            aria-label="Закрыть"
+          />
+        </Link>
       </Control>
     </Wrapper>
   )

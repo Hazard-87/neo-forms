@@ -8,18 +8,17 @@ import { AutoComplete } from 'primereact/autocomplete'
 import { classNames } from 'primereact/utils'
 import { Image } from 'primereact/image'
 import styles from './RegistrationForm.module.scss'
-import { AppCameraComponent } from '../AppCameraComponent/AppCameraComponent'
 import { ConfirmDialog, confirmDialog } from 'primereact/confirmdialog'
 import cities from '../../lib/cities'
 import emails from '../../lib/emails'
 import { Data, IFormData } from '../../interfaces/DataTypes'
 import moment from 'moment'
+import { Link } from 'react-router-dom'
 
 interface RegistrationFormProps {
   defaultValues: Data
   photos: string[]
   localFiles: IFormData[]
-  addPhoto: (photo: string) => void
   onSubmit: (data: IFormData) => void
   removePhotos: () => void
   submitLocal: () => void
@@ -29,7 +28,6 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
   defaultValues,
   photos,
   localFiles,
-  addPhoto,
   removePhotos,
   onSubmit,
   submitLocal
@@ -44,7 +42,6 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
   ]
 
   const [selectedCategory, setSelectedCategory] = useState(categories[0])
-  const [visible, setVisible] = React.useState(false)
   const [filteredCities, setFilteredCities] = useState<string[]>([])
   const [filteredMails, setFilteredMails] = useState<string[]>([])
 
@@ -127,9 +124,13 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
     })
   }
 
-  if (visible) {
-    return <AppCameraComponent addPhoto={addPhoto} onClose={() => setVisible(false)} />
+  const openCamera = () => {
+    //todo нужно прописать роут к камере
   }
+
+  // if (visible) {
+  //   return <AppCameraComponent addPhoto={addPhoto} onClose={() => setVisible(false)} />
+  // }
 
   return (
     <div className={styles.card}>
@@ -289,11 +290,9 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
             </span>
           </div>
 
-          <Button
-            label="Приложить визитку"
-            className="p-button-outlined"
-            onClick={() => setVisible(true)}
-          />
+          <Link to={'/camera'}>
+            <Button label="Приложить визитку" className="p-button-outlined" />
+          </Link>
           <div className={styles.board}>
             {photos.map((item) => (
               <Image key={item} src={item} alt="photo" imageClassName={styles.image} />
