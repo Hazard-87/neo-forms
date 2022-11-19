@@ -12,7 +12,6 @@ const Home = () => {
   const { db, setDoc, doc, photos, setPhotos } = useContext(Context)
   const toast = useRef(null)
   const [fetching, setFetching] = React.useState<boolean>(false)
-  // const [photos, setPhotos] = React.useState<string[]>([])
   const [localFiles, setLocalFiles] = React.useState<IFormData[]>([])
 
   const values: Data = {

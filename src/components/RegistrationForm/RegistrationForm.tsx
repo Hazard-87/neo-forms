@@ -290,7 +290,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
             </span>
           </div>
 
-          <Link to={'/camera'}>
+          <Link to={'/camera'} className={'linkButton'}>
             <Button label="Приложить визитку" className="p-button-outlined" />
           </Link>
           <div className={styles.board}>

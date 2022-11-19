@@ -217,7 +217,7 @@ export const AppCameraComponent: React.FC<AppCameraComponentProps> = ({ addPhoto
             }
           }}
         />
-        <Link to={'/'}>
+        <Link to={'/'} className={'linkButton'}>
           <Pbutton
             icon="pi pi-times"
             className="p-button-rounded p-button-danger p-button-outlined"
