@@ -1,4 +1,6 @@
+import moment from 'moment'
 import React, { useState } from 'react'
+import { Link, Outlet, useLocation } from 'react-router-dom'
 import { useForm, Controller } from 'react-hook-form'
 import { InputText } from 'primereact/inputtext'
 import { InputTextarea } from 'primereact/inputtextarea'
@@ -12,13 +14,12 @@ import { ConfirmDialog, confirmDialog } from 'primereact/confirmdialog'
 import cities from '../../lib/cities'
 import emails from '../../lib/emails'
 import { Data, IFormData } from '../../interfaces/DataTypes'
-import moment from 'moment'
-import { Link } from 'react-router-dom'
 
 interface RegistrationFormProps {
   defaultValues: Data
   photos: string[]
   localFiles: IFormData[]
+  visibleCamera: boolean
   onSubmit: (data: IFormData) => void
   removePhotos: () => void
   submitLocal: () => void
@@ -28,6 +29,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
   defaultValues,
   photos,
   localFiles,
+  visibleCamera,
   removePhotos,
   onSubmit,
   submitLocal
@@ -124,13 +126,9 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
     })
   }
 
-  const openCamera = () => {
-    //todo нужно прописать роут к камере
+  if (visibleCamera) {
+    return <Outlet />
   }
-
-  // if (visible) {
-  //   return <AppCameraComponent addPhoto={addPhoto} onClose={() => setVisible(false)} />
-  // }
 
   return (
     <div className={styles.card}>

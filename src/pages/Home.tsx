@@ -2,17 +2,19 @@ import React, { useContext, useRef } from 'react'
 import { RegistrationForm } from '../components/RegistrationForm/RegistrationForm'
 import styles from '../styles/Home.module.scss'
 import { Toast } from 'primereact/toast'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { AppButton } from '../components/AppButton/AppButton'
 import { Context } from '../App'
 import { AppProgressBar } from '../components/AppProgressBar/AppProgressBar'
 import { Data, IFormData } from '../interfaces/DataTypes'
 
 const Home = () => {
+  const location = useLocation()
   const { db, setDoc, doc, photos, setPhotos } = useContext(Context)
   const toast = useRef(null)
   const [fetching, setFetching] = React.useState<boolean>(false)
   const [localFiles, setLocalFiles] = React.useState<IFormData[]>([])
+  const [visibleCamera, setVisibleCamera] = React.useState(false)
 
   const values: Data = {
     company: '',
@@ -23,6 +25,14 @@ const Home = () => {
     city: '',
     comment: ''
   }
+
+  React.useEffect(() => {
+    if (location.pathname === '/camera') {
+      setVisibleCamera(true)
+    } else {
+      setVisibleCamera(false)
+    }
+  }, [location])
 
   React.useEffect(() => {
     const item = localStorage.getItem('formData')
@@ -119,14 +129,17 @@ const Home = () => {
       <RegistrationForm
         defaultValues={values}
         photos={photos}
+        visibleCamera={visibleCamera}
         localFiles={localFiles}
         onSubmit={handleSubmit}
         submitLocal={submitLocal}
         removePhotos={removePhotos}
       />
-      <Link to="/result" className={styles.link}>
-        <AppButton label="Заполненные данные" className="p-button-text" />
-      </Link>
+      {!visibleCamera ? (
+        <Link to="/result" className={styles.link}>
+          <AppButton label="Заполненные данные" className="p-button-text" />
+        </Link>
+      ) : null}
     </div>
   )
 }
