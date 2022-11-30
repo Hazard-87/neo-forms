@@ -26,7 +26,6 @@ export const FormDataTable: React.FC = () => {
         items.push(doc.data())
       })
       const itemsData = items.map((item) => item)
-      console.log(itemsData)
       setData(items)
     } finally {
       setFetching(false)
@@ -95,11 +94,27 @@ export const FormDataTable: React.FC = () => {
     saveAs(blob, `save.csv`)
   }
 
+  const exportPhotos = () => {
+    let files: any[] = []
+    data.forEach((d) => {
+      files = [...files, ...d.photos]
+    })
+    files.forEach((file, i) => {
+      saveAs(file, `photo_${i + 1}`)
+    })
+  }
+
   return (
     <>
       <AppSpinner fetching={fetching} />
       <div className={styles.header}>
         <AppButton icon="pi pi-file" label="Экспорт CSV" onClick={handleSave} />
+        <AppButton
+          icon="pi pi-image"
+          label="Экспорт фото"
+          className="p-button-outlined"
+          onClick={exportPhotos}
+        />
         <Link to="/">
           <AppButton label="Форма для заполнения" className="p-button-text" />
         </Link>
